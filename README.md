@@ -1,3 +1,20 @@
+Designed by -->
+Anuj Dhillon
+IIT Delhi
+anuj.dhillon.14@gmail.com
+
+This project offers -->
+
+1. Easy exchange of Company logos.
+2. Google Login support
+3. Facebook Login support
+4. Manual login with validated forms. API used as of now is Reqres API for validation.
+5. Bootstrap css
+6. Responsive Across all screens.
+
+In the project directory, you can run: `npm start` in cmd to run this app in development mode.
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
@@ -68,3 +85,7 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `yarn build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+

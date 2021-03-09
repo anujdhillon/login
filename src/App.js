@@ -1,19 +1,19 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Button, Form, FormGroup, Input, Card, Col, FormFeedback} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Card, Col, FormFeedback, InputGroup} from 'reactstrap';
 import ReactDOM from 'react-dom';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
-import logo from './logo.png'
+
 class App extends Component{
   constructor(props){
     super(props);
-    this.state = {
+    this.state = { //stores the states of all the input fields
       firstname: "",
       lastname: "",
       email: "",
       password: "",
-      touched: {
+      touched: { //checks whether user has typed in the field at least once or not
         firstname: false,
         lastname: false,
         password: false,
@@ -22,25 +22,25 @@ class App extends Component{
     };
     this.submit = this.submit.bind(this)   
   }
-fbclick = () =>{
+fbclick = () =>{ //this method just needs to be defined. It has no purpose.
 
 }
 
-  responseFacebook = (response) => {
+  responseFacebook = (response) => { //Receives response from Facebook API
     console.log(response)
     alert("Signed up with the name "+response.name);
 }
 
-  responseGoogle = (response) => {
+  responseGoogle = (response) => { //Receives response from Google API
     console.log(response)
     alert("Signed up with the name "+response.profileObj.name);
   }
 
   async submit() {
     const url = 'https://reqres.in/api/register';
-    const response = await fetch(url,{
+    const response = await fetch(url,{ //Posting the data to reqres register API
       method: 'post',
-      mode: 'cors',
+      mode: 'cors', //make sure that mode is cors and not no-cors
       headers: {
         'Accept': 'application/json',
         'Content-type': 'application/json',
@@ -52,17 +52,22 @@ fbclick = () =>{
     });
     const data = await response.json();
     console.log(data);
-    alert("User: "+this.state.firstname+" "+this.state.lastname+" registered.\n"+"ID: "+data.id+"\nToken: "+data.token)
+    /*The reqres API works only with a few email addresses of their users.
+     An id and token will be provided only if a valid email is entered*/
+    var status = "";
+    if(data.id === undefined) status = " not Registered\n"; else status = " Registered\n" 
+
+    alert("User: "+this.state.firstname+" "+this.state.lastname+status+"ID: "+data.id+"\nToken: "+data.token)
   }  
 
   validate(firstname, lastname, password, email) {
     const errors = {
         firstname: '',
         lastname: '',
-        telnum: '',
+        password: '',
         email: ''
     };
-
+    //These are some form validation rules. The developer can change them as per their convenience
     if (this.state.touched.firstname && firstname.length < 3)
         errors.firstname = 'First Name should be >= 3 characters';
     else if (this.state.touched.firstname && firstname.length > 10)
@@ -82,13 +87,13 @@ fbclick = () =>{
     return errors;
 }
 
-handleBlur = (field) => (evt) => {
+handleBlur = (field) => (evt) => { //This methods switches the touched field of the state
   this.setState({
       touched: { ...this.state.touched, [field]: true }
   });
 }
 
-  handleInputChange = (event) => {
+  handleInputChange = (event) => { //Typing in the input boxes is allowed by this method
     const target = event.target;
     const value = target.value;
     const name = target.name;
@@ -98,12 +103,16 @@ handleBlur = (field) => (evt) => {
 };
 
   render() {
-    const errors = this.validate(this.state.firstname, this.state.lastname, this.state.password, this.state.email);
+    const errors = this.validate(this.state.firstname, this.state.lastname, this.state.password, this.state.email); //errors variable stores the errors of the input fields (boolean)
     return (
-      <div style= {{padding: "2%"}}>
-      <img className="brandlogo" src = {logo} alt="Insert Company Logo" width = "150" height= "40"/>  
-      <Col lg={{ size: 6, offset: 3 }} md = {{ size: 8, offset: 2 }}>
-      <Card>
+      <div //container div
+       style= {{padding: "2%"}}> 
+      <img //brand logo
+       className="brandlogo" src = "" alt="Insert Company Logo" width = "150" height= "40"/> 
+      <Col //columns are allowed as per screen size
+       lg={{ size: 6, offset: 3 }} md = {{ size: 8, offset: 2 }}>
+      <Card //encloses the entire form into a card
+      >
       <div style= {{width: "75%",margin:"auto"}}>
       <Form>
         <div style = {{textAlign:"center", margin:"auto"}}>
@@ -112,16 +121,16 @@ handleBlur = (field) => (evt) => {
           <p>
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel ipsum nec ligula dictum maximus.</p>
         </div>
-        <FacebookLogin
+        <FacebookLogin //standard settings for a facebook login button
     appId="908794199936564"
     autoLoad={true}
     fields="name,email"
     callback={this.responseFacebook}
-    cssClass="btn btn-light fb-btn"
+    cssClass="btn btn-light fb-btn" //custom css provided
     icon="icon-fb"
     textButton ="Sign up using Facebook"
   />
-  <GoogleLogin
+  <GoogleLogin //standard settings for a google login button
     clientId = "986126981752-bqk4k0imv3a3dta7isfsegethe0npdmo.apps.googleusercontent.com"
     render={renderProps => (
       <button onClick={renderProps.onClick} className="btn btn-light google-btn" ><i class = "icon-google"></i>Sign up using Google</button>
@@ -132,8 +141,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel ipsum nec li
     cookiePolicy={'single_host_origin'}
     
   />
-        <div className="divider">
-          <span>or</span>
+        <div //divider with an 'or' in center
+         className="divider">
+          <span>or</span> 
         </div>
         <FormGroup>
           <Input value={this.state.firstname} onChange={this.handleInputChange} valid = {errors.firstname === ''} invalid = {errors.firstname !== ''} onBlur = {this.handleBlur('firstname')} name = "firstname" type = "firstname" placeholder="First Name"/>
@@ -159,7 +169,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel ipsum nec li
       </div>
       </Card>
       </Col>
-      </div>
+      </div> 
     );
   }
 }
