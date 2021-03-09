@@ -63,3 +63,10 @@
   width:49%;
   float: right;
 }
+
+.brandlogo{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+}

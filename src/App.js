@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import './App.css';
-import {Button, Form, FormGroup, Input, Card, Col} from 'reactstrap';
+import {Button, Form, FormGroup, Input, Card, Col, FormFeedback} from 'reactstrap';
 import ReactDOM from 'react-dom';
 import FacebookLogin from 'react-facebook-login';
 import GoogleLogin from 'react-google-login';
+import logo from './logo.png'
 class App extends Component{
   constructor(props){
     super(props);
@@ -11,7 +12,13 @@ class App extends Component{
       firstname: "",
       lastname: "",
       email: "",
-      password: ""
+      password: "",
+      touched: {
+        firstname: false,
+        lastname: false,
+        password: false,
+        email: false
+    }
     };
     this.submit = this.submit.bind(this)   
   }
@@ -48,6 +55,39 @@ fbclick = () =>{
     alert("User: "+this.state.firstname+" "+this.state.lastname+" registered.\n"+"ID: "+data.id+"\nToken: "+data.token)
   }  
 
+  validate(firstname, lastname, password, email) {
+    const errors = {
+        firstname: '',
+        lastname: '',
+        telnum: '',
+        email: ''
+    };
+
+    if (this.state.touched.firstname && firstname.length < 3)
+        errors.firstname = 'First Name should be >= 3 characters';
+    else if (this.state.touched.firstname && firstname.length > 10)
+        errors.firstname = 'First Name should be <= 10 characters';
+
+    if (this.state.touched.lastname && lastname.length < 3)
+        errors.lastname = 'Last Name should be >= 3 characters';
+    else if (this.state.touched.lastname && lastname.length > 10)
+        errors.lastname = 'Last Name should be <= 10 characters';
+
+    if (this.state.touched.password && password.length <8)
+        errors.password = 'Password should be at least 8 characters long';
+
+    if(this.state.touched.email && email.split('').filter(x => x === '@').length !== 1)
+        errors.email = 'Email should contain a @';
+
+    return errors;
+}
+
+handleBlur = (field) => (evt) => {
+  this.setState({
+      touched: { ...this.state.touched, [field]: true }
+  });
+}
+
   handleInputChange = (event) => {
     const target = event.target;
     const value = target.value;
@@ -58,8 +98,10 @@ fbclick = () =>{
 };
 
   render() {
+    const errors = this.validate(this.state.firstname, this.state.lastname, this.state.password, this.state.email);
     return (
       <div style= {{padding: "2%"}}>
+      <img className="brandlogo" src = {logo} alt="Insert Company Logo" width = "150" height= "40"/>  
       <Col lg={{ size: 6, offset: 3 }} md = {{ size: 8, offset: 2 }}>
       <Card>
       <div style= {{width: "75%",margin:"auto"}}>
@@ -94,16 +136,20 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris vel ipsum nec li
           <span>or</span>
         </div>
         <FormGroup>
-          <Input value={this.state.firstname} onChange={this.handleInputChange} name = "firstname" type = "firstname" placeholder="First Name"/>
+          <Input value={this.state.firstname} onChange={this.handleInputChange} valid = {errors.firstname === ''} invalid = {errors.firstname !== ''} onBlur = {this.handleBlur('firstname')} name = "firstname" type = "firstname" placeholder="First Name"/>
+          <FormFeedback>{errors.firstname}</FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Input value={this.state.lastname} onChange={this.handleInputChange} name = "lastname" type = "lastname" placeholder="Last Name"/>
+          <Input value={this.state.lastname} onChange={this.handleInputChange} valid = {errors.lastname === ''} invalid = {errors.lastname !== ''} onBlur = {this.handleBlur('lastname')} name = "lastname" type = "lastname" placeholder="Last Name"/>
+          <FormFeedback>{errors.lastname}</FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Input value={this.state.email} onChange={this.handleInputChange} name = "email" type = "email" placeholder="Email"/>
+          <Input value={this.state.email} onChange={this.handleInputChange} valid = {errors.email === ''} invalid = {errors.email !== ''} onBlur = {this.handleBlur('email')} name = "email" type = "email" placeholder="Email"/>
+          <FormFeedback>{errors.email}</FormFeedback>
         </FormGroup>
         <FormGroup>
-          <Input value={this.state.password} onChange={this.handleInputChange} name ="password" type = "password" placeholder="Password"/>
+          <Input value={this.state.password} onChange={this.handleInputChange} valid = {errors.password === ''} invalid = {errors.password !== ''} onBlur = {this.handleBlur('password')} name ="password" type = "password" placeholder="Password"/>
+          <FormFeedback>{errors.password}</FormFeedback>
         </FormGroup>
       </Form>
       <div style={{textAlign:"center"}}>
