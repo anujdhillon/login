@@ -15,6 +15,7 @@ This project offers -->
 
 In the project directory, type in the command line:
  `npm install`
+ 
  `npm start`
 
 This will run the application in developer mode.
