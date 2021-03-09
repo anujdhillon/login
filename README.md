@@ -1,9 +1,8 @@
 Designed by -->
-Anuj Dhillon
-
+Anuj Dhillon,
 IIT Delhi
 
-anuj.dhillon.14@gmail.com
+Contact me@ anuj.dhillon.14@gmail.com
 
 This project offers -->
 
